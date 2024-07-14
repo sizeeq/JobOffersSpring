@@ -7,6 +7,6 @@ public class HappyPathIntegrationTest extends BaseIntegrationTest {
 
     @Test
     public void test() {
-
+        ///
     }
 }
