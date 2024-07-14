@@ -15,7 +15,6 @@
     <artifactId>JobOffersJakub</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -23,6 +22,7 @@
         <testcontainers.version>1.19.8</testcontainers.version>
         <assertj-core.version>3.26.3</assertj-core.version>
         <lombok.version>1.18.34</lombok.version>
+        <wiremock-jre8-standalone.version>3.0.1</wiremock-jre8-standalone.version>
     </properties>
 
     <dependencies>
@@ -31,7 +31,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -44,13 +43,26 @@
             <version>${lombok.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!--UNIT TESTING-->
+        <!--TEST CONTAINERS-->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>mongodb</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!--UNIT TESTING-->
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -61,6 +73,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <!--WIRE MOCK-->
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8-standalone</artifactId>
+            <version>${wiremock-jre8-standalone.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -88,5 +107,4 @@
             <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
     </repositories>
-
 </project>
