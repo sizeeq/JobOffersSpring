@@ -1,5 +1,7 @@
 package pl.joboffers.domain.offer;
 
+import pl.joboffers.domain.offer.exception.DuplicateOfferException;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,7 +16,7 @@ public class InMemoryOfferRepositoryImpl implements OfferRepository {
     public boolean existsByUrl(String url) {
         long count = database.values()
                 .stream()
-                .filter(offer -> offer.URL().equals(url))
+                .filter(offer -> offer.offerUrl().equals(url))
                 .count();
         return count == 1;
     }
@@ -48,8 +50,8 @@ public class InMemoryOfferRepositoryImpl implements OfferRepository {
     public Offer save(Offer offer) {
         if (database.values()
                 .stream()
-                .anyMatch(offer1 -> offer1.URL().equals(offer.URL()))) {
-            throw new DuplicateOfferException(offer.URL());
+                .anyMatch(offer1 -> offer1.offerUrl().equals(offer.offerUrl()))) {
+            throw new DuplicateOfferException(offer.offerUrl());
         }
         UUID id = UUID.randomUUID();
         Offer offerToSave = new Offer(
@@ -57,7 +59,7 @@ public class InMemoryOfferRepositoryImpl implements OfferRepository {
                 offer.companyName(),
                 offer.position(),
                 offer.salary(),
-                offer.URL()
+                offer.offerUrl()
         );
         database.put(id.toString(), offerToSave);
         return offerToSave;

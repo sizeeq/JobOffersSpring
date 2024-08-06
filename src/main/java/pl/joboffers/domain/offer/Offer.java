@@ -8,5 +8,5 @@ public record Offer(
         String companyName,
         String position,
         String salary,
-        String URL) {
+        String offerUrl) {
 }

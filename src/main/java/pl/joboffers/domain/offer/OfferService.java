@@ -1,7 +1,8 @@
 package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
-import pl.joboffers.domain.offer.dto.OfferFetchable;
+import pl.joboffers.domain.offer.exception.DuplicateOfferException;
+import pl.joboffers.domain.offer.exception.OfferSavingException;
 
 import java.util.List;
 
@@ -10,13 +11,13 @@ public class OfferService {
 
     private final OfferRepository offerRepository;
     private final OfferFetchable offerFetcher;
-    private static final OfferMapper offerMapper = new OfferMapper();
 
     List<Offer> fetchAndSaveAllOffersIfNotExist() {
         List<Offer> offers = fetchOffers();
         final List<Offer> filteredOffers = filterNotExistingOffers(offers);
         try {
-            return offerRepository.saveAll(filteredOffers);
+            return filteredOffers;
+//            return offerRepository.saveAll(filteredOffers);
         } catch (DuplicateOfferException duplicateOfferException) {
             throw new OfferSavingException(duplicateOfferException.getMessage(), filteredOffers);
         }
@@ -25,15 +26,15 @@ public class OfferService {
     private List<Offer> filterNotExistingOffers(List<Offer> offers) {
         return offers
                 .stream()
-                .filter(offer -> !offer.URL().isEmpty())
-                .filter(offer -> !offerRepository.existsByUrl(offer.URL()))
+                .filter(offer -> !offer.offerUrl().isEmpty())
+                .filter(offer -> !offerRepository.existsByUrl(offer.offerUrl()))
                 .toList();
     }
 
     private List<Offer> fetchOffers() {
         return offerFetcher.fetchOffers()
                 .stream()
-                .map(offerMapper::mapFromJobOfferResponseDtoToOffer)
+                .map(OfferMapper::mapFromJobOfferResponseDtoToOffer)
                 .toList();
     }
 }

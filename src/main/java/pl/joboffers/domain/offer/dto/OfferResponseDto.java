@@ -8,5 +8,5 @@ public record OfferResponseDto(
         String companyName,
         String position,
         String salary,
-        String URL) {
+        String offerUrl) {
 }

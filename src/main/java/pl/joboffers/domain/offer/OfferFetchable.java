@@ -1,4 +1,6 @@
-package pl.joboffers.domain.offer.dto;
+package pl.joboffers.domain.offer;
+
+import pl.joboffers.domain.offer.dto.JobOfferResponseDto;
 
 import java.util.List;
 
