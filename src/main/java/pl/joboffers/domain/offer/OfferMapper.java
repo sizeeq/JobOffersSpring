@@ -10,7 +10,7 @@ public class OfferMapper {
         return OfferResponseDto.builder()
                 .id(offer.id())
                 .companyName(offer.companyName())
-                .offerUrl(offer.offerUrl())
+                .offerUrl(offer.url())
                 .position(offer.position())
                 .salary(offer.salary())
                 .build();
@@ -21,14 +21,14 @@ public class OfferMapper {
                 .companyName(offerRequestDto.companyName())
                 .position(offerRequestDto.position())
                 .salary(offerRequestDto.salary())
-                .offerUrl(offerRequestDto.offerUrl())
+                .url(offerRequestDto.offerUrl())
                 .build();
     }
 
     public static Offer mapFromJobOfferResponseDtoToOffer(JobOfferResponseDto jobOfferResponseDto) {
         return Offer.builder()
                 .companyName(jobOfferResponseDto.company())
-                .offerUrl(jobOfferResponseDto.offerUrl())
+                .url(jobOfferResponseDto.offerUrl())
                 .salary(jobOfferResponseDto.salary())
                 .position(jobOfferResponseDto.title())
                 .build();

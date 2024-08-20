@@ -23,7 +23,7 @@ public class OfferHttpClientScheduler {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
     @Scheduled(fixedDelayString = "${job-offers.scheduler.request.delay}")
-    public List<OfferResponseDto> fetchAndSaveOffers() {
+    public List<OfferResponseDto> fetchAllOffersAndSaveIfNotExist() {
         log.info(STARTED_FETCHING_OFFERS_MESSAGE, dateFormat.format(new Date()));
         final List<OfferResponseDto> savedOffers = offerFacade.fetchAndSaveOffersIfNotExist();
         log.info(FINISHED_FETCHING_OFFERS_MESSAGE, savedOffers);

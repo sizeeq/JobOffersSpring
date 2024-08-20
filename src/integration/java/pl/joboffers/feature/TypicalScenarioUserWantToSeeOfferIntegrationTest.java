@@ -4,13 +4,20 @@ import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 import pl.joboffers.BaseIntegrationTest;
 import pl.joboffers.SampleJobOfferResponse;
 import pl.joboffers.domain.offer.OfferFetchable;
 import pl.joboffers.domain.offer.dto.JobOfferResponseDto;
+import pl.joboffers.domain.offer.dto.OfferResponseDto;
 import pl.joboffers.infrastructure.offer.scheduler.OfferHttpClientScheduler;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TypicalScenarioUserWantToSeeOfferIntegrationTest extends BaseIntegrationTest implements SampleJobOfferResponse {
 
@@ -21,26 +28,41 @@ public class TypicalScenarioUserWantToSeeOfferIntegrationTest extends BaseIntegr
     OfferHttpClientScheduler scheduler;
 
     @Test
-    public void user_want_to_see_offers_but_have_to_be_logged_in_and_external_server_should_have_some_offers() {
+    public void user_want_to_see_offers_but_have_to_be_logged_in_and_external_server_should_have_some_offers() throws Exception {
         //step 1: there are no offers in external HTTP server
 
         wireMockServer.stubFor(WireMock.get("/offers")
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader("Content-Type", "application/json")
-                        .withBody(bodyWithOneOfferJson())));
+                        .withBody(bodyWithZeroOffersJson())));
 
         List<JobOfferResponseDto> jobOfferResponse = offerHttpClient.fetchOffers();
 
         //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
 
-        scheduler.fetchAndSaveOffers();
+        //given //when
+        List<OfferResponseDto> offerResponseDtos = scheduler.fetchAllOffersAndSaveIfNotExist();
+
+        //then
+        assertThat(offerResponseDtos).isEmpty();
+
+        //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
 
         //given
         //when
+        ResultActions resultActions = mockMvc.perform(post("/token")
+                .content("""
+                        {
+                        "username": "admin",
+                        "password": "admin",
+                        }
+                        """).contentType(MediaType.APPLICATION_JSON)
+        );
         //then
+        resultActions.andExpect(status().isUnauthorized());
 
-        //step 3: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned UNAUTHORIZED(401)
+
         //step 4: user made GET //offers with no jwt token and system returned UNAUTHORIZED(401)
         //step 5: user made POST /register with username=someUser, password=somePassword and system registered user with status OK(200)
         //step 6: user tried to get JWT token by requesting POST /token with username=someUser, password=somePassword and system returned OK(200) and jtwtoken=AAAA.BBBB.CCC

@@ -13,13 +13,13 @@ import pl.joboffers.domain.offer.dto.JobOfferResponseDto;
 import java.util.Collections;
 import java.util.List;
 
-@AllArgsConstructor
 @Log4j2
+@AllArgsConstructor
 public class OfferHttpClient implements OfferFetchable {
 
     public final RestTemplate restTemplate;
-    public final String uri;
-    public final int port;
+    public String uri;
+    public int port;
 
     @Override
     public List<JobOfferResponseDto> fetchOffers() {

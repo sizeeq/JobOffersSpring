@@ -16,25 +16,24 @@ public class OfferService {
         List<Offer> offers = fetchOffers();
         final List<Offer> filteredOffers = filterNotExistingOffers(offers);
         try {
-            return filteredOffers;
-//            return offerRepository.saveAll(filteredOffers);
+            return offerRepository.saveAll(filteredOffers);
         } catch (DuplicateOfferException duplicateOfferException) {
             throw new OfferSavingException(duplicateOfferException.getMessage(), filteredOffers);
         }
-    }
-
-    private List<Offer> filterNotExistingOffers(List<Offer> offers) {
-        return offers
-                .stream()
-                .filter(offer -> !offer.offerUrl().isEmpty())
-                .filter(offer -> !offerRepository.existsByUrl(offer.offerUrl()))
-                .toList();
     }
 
     private List<Offer> fetchOffers() {
         return offerFetcher.fetchOffers()
                 .stream()
                 .map(OfferMapper::mapFromJobOfferResponseDtoToOffer)
+                .toList();
+    }
+
+    private List<Offer> filterNotExistingOffers(List<Offer> offers) {
+        return offers
+                .stream()
+                .filter(offer -> !offer.url().isEmpty())
+                .filter(offer -> !offerRepository.existsByUrl(offer.url()))
                 .toList();
     }
 }

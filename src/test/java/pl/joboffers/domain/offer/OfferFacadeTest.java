@@ -50,12 +50,14 @@ public class OfferFacadeTest {
         List<OfferResponseDto> response = offerFacade.fetchAndSaveOffersIfNotExist();
 
         //then
+        assertThat(response).hasSize(2); // Only two new offers should be saved
         assertThat(List.of(
                         response.get(0).offerUrl(),
                         response.get(1).offerUrl()
                 )
         ).containsExactlyInAnyOrder("https://google.com/1", "https://google.com/2");
     }
+
 
     @Test
     public void shouldSave4OffersWhenThereIsNoOffersInDatabase() {

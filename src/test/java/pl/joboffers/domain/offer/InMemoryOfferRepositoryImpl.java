@@ -1,5 +1,11 @@
 package pl.joboffers.domain.offer;
 
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.FluentQuery;
 import pl.joboffers.domain.offer.exception.DuplicateOfferException;
 
 import java.util.List;
@@ -7,18 +13,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
 public class InMemoryOfferRepositoryImpl implements OfferRepository {
 
-    Map<String, Offer> database = new ConcurrentHashMap<>();
+    private final Map<String, Offer> database = new ConcurrentHashMap<>();
 
     @Override
     public boolean existsByUrl(String url) {
-        long count = database.values()
+        return database.values()
                 .stream()
-                .filter(offer -> offer.offerUrl().equals(url))
-                .count();
-        return count == 1;
+                .anyMatch(offer -> offer.url().equals(url));
     }
 
     @Override
@@ -29,39 +35,145 @@ public class InMemoryOfferRepositoryImpl implements OfferRepository {
     }
 
     @Override
+    public List<Offer> findAllById(Iterable<String> strings) {
+        return List.of(); // Implement if necessary
+    }
+
+    @Override
+    public long count() {
+        return database.size();
+    }
+
+    @Override
+    public void deleteById(String id) {
+        database.remove(id);
+    }
+
+    @Override
+    public void delete(Offer entity) {
+        database.remove(entity.id());
+    }
+
+    @Override
+    public void deleteAllById(Iterable<? extends String> strings) {
+        strings.forEach(this::deleteById);
+    }
+
+    @Override
+    public void deleteAll(Iterable<? extends Offer> entities) {
+        entities.forEach(this::delete);
+    }
+
+    @Override
+    public void deleteAll() {
+        database.clear();
+    }
+
+    @Override
     public Optional<Offer> findById(String id) {
         return Optional.ofNullable(database.get(id));
     }
 
     @Override
-    public Optional<Offer> findByUrl(String url) {
-        return Optional.of(database.get(url));
+    public boolean existsById(String id) {
+        return database.containsKey(id);
     }
 
     @Override
-    public List<Offer> saveAll(List<Offer> offers) {
-        return offers
+    public Optional<Offer> findByUrl(String url) {
+        return database.values()
                 .stream()
+                .filter(offer -> offer.url().equals(url))
+                .findFirst();
+    }
+
+    @Override
+    public <S extends Offer> List<S> saveAll(Iterable<S> entities) {
+        return StreamSupport.stream(entities.spliterator(), false)
                 .map(this::save)
                 .toList();
     }
 
     @Override
-    public Offer save(Offer offer) {
-        if (database.values()
-                .stream()
-                .anyMatch(offer1 -> offer1.offerUrl().equals(offer.offerUrl()))) {
-            throw new DuplicateOfferException(offer.offerUrl());
+    public <S extends Offer> S save(@NotNull S entity) {
+        if (existsByUrl(entity.url())) {
+            throw new DuplicateOfferException(entity.url());
         }
-        UUID id = UUID.randomUUID();
-        Offer offerToSave = new Offer(
-                id.toString(),
-                offer.companyName(),
-                offer.position(),
-                offer.salary(),
-                offer.offerUrl()
+        String id = UUID.randomUUID().toString();
+        Offer offer = new Offer(
+                id,
+                entity.companyName(),
+                entity.position(),
+                entity.salary(),
+                entity.url()
         );
-        database.put(id.toString(), offerToSave);
-        return offerToSave;
+        database.put(id, offer);
+        return (S) offer;
+    }
+
+    @Override
+    public <S extends Offer> S insert(S entity) {
+        // Implement if necessary
+        return null;
+    }
+
+    @Override
+    public <S extends Offer> List<S> insert(Iterable<S> entities) {
+        // Implement if necessary
+        return List.of();
+    }
+
+    @Override
+    public <S extends Offer> Optional<S> findOne(Example<S> example) {
+        // Implement if necessary
+        return Optional.empty();
+    }
+
+    @Override
+    public <S extends Offer> List<S> findAll(Example<S> example) {
+        // Implement if necessary
+        return List.of();
+    }
+
+    @Override
+    public <S extends Offer> List<S> findAll(Example<S> example, Sort sort) {
+        // Implement if necessary
+        return List.of();
+    }
+
+    @Override
+    public <S extends Offer> Page<S> findAll(Example<S> example, Pageable pageable) {
+        // Implement if necessary
+        return null;
+    }
+
+    @Override
+    public <S extends Offer> long count(Example<S> example) {
+        // Implement if necessary
+        return 0;
+    }
+
+    @Override
+    public <S extends Offer> boolean exists(Example<S> example) {
+        // Implement if necessary
+        return false;
+    }
+
+    @Override
+    public <S extends Offer, R> R findBy(Example<S> example, Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+        // Implement if necessary
+        return null;
+    }
+
+    @Override
+    public List<Offer> findAll(Sort sort) {
+        // Implement if necessary
+        return List.of();
+    }
+
+    @Override
+    public Page<Offer> findAll(Pageable pageable) {
+        // Implement if necessary
+        return null;
     }
 }

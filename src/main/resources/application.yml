@@ -2,6 +2,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/joboffers-web
+  main:
+    allow-bean-definition-overriding: true
 
 job-offers:
   scheduler:
@@ -17,3 +19,4 @@ job-offers:
 
 scheduling:
   enabled: true
+
