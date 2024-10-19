@@ -4,6 +4,7 @@ import org.junit.Test;
 import pl.joboffers.domain.loginandregister.dto.RegisterResultDto;
 import pl.joboffers.domain.loginandregister.dto.RegisterUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
+import pl.joboffers.domain.loginandregister.exception.UserNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;

@@ -1,7 +1,6 @@
 package pl.joboffers.domain.offer;
 
 import pl.joboffers.domain.offer.dto.JobOfferResponseDto;
-import pl.joboffers.domain.offer.dto.OfferFetchable;
 
 import java.util.List;
 

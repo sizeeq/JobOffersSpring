@@ -7,5 +7,6 @@ public record OfferRequestDto(
         String companyName,
         String position,
         String salary,
-        String URL) {
+        String offerUrl
+) {
 }

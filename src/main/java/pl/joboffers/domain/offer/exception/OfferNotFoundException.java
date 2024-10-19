@@ -1,5 +1,8 @@
-package pl.joboffers.domain.offer;
+package pl.joboffers.domain.offer.exception;
 
+import lombok.Getter;
+
+@Getter
 public class OfferNotFoundException extends RuntimeException{
 
     public OfferNotFoundException(String id) {

@@ -1,6 +1,5 @@
 package pl.joboffers;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -15,10 +14,11 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
+import pl.joboffers.feature.IntegrationConfiguration;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
-@SpringBootTest(classes = JobOffersApplication.class)
+@SpringBootTest(classes = {JobOffersApplication.class, IntegrationConfiguration.class})
 @ActiveProfiles("integration")
 @AutoConfigureMockMvc
 @Testcontainers
@@ -43,7 +43,7 @@ public class BaseIntegrationTest {
     @DynamicPropertySource
     public static void propertyOverride(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-//        registry.add("offer.http.client.config.uri", () -> WIRE_MOCK_HOST);
-//        registry.add("offer.http.client.config.port", () -> wireMockServer.getPort());
+        registry.add("job-offers.http.client.config.uri", () -> WIRE_MOCK_HOST);
+        registry.add("job-offers.http.client.config.port", () -> wireMockServer.getPort());
     }
 }

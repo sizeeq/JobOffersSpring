@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import pl.joboffers.domain.loginandregister.dto.RegisterResultDto;
 import pl.joboffers.domain.loginandregister.dto.RegisterUserDto;
 import pl.joboffers.domain.loginandregister.dto.UserDto;
+import pl.joboffers.domain.loginandregister.exception.UserNotFoundException;
 
 @AllArgsConstructor
 public class LoginAndRegisterFacade {

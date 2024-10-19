@@ -4,6 +4,8 @@ import org.junit.Test;
 import pl.joboffers.domain.offer.dto.JobOfferResponseDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
+import pl.joboffers.domain.offer.exception.DuplicateOfferException;
+import pl.joboffers.domain.offer.exception.OfferNotFoundException;
 
 import java.util.List;
 
@@ -48,12 +50,14 @@ public class OfferFacadeTest {
         List<OfferResponseDto> response = offerFacade.fetchAndSaveOffersIfNotExist();
 
         //then
+        assertThat(response).hasSize(2); // Only two new offers should be saved
         assertThat(List.of(
-                        response.get(0).URL(),
-                        response.get(1).URL()
+                        response.get(0).offerUrl(),
+                        response.get(1).offerUrl()
                 )
         ).containsExactlyInAnyOrder("https://google.com/1", "https://google.com/2");
     }
+
 
     @Test
     public void shouldSave4OffersWhenThereIsNoOffersInDatabase() {
@@ -85,7 +89,7 @@ public class OfferFacadeTest {
                 .salary(offerResponseDto.salary())
                 .position(offerResponseDto.position())
                 .companyName(offerResponseDto.companyName())
-                .URL(offerResponseDto.URL())
+                .offerUrl(offerResponseDto.offerUrl())
                 .build()
         );
     }
