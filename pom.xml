@@ -26,10 +26,11 @@
         <awaitility.version>4.2.1</awaitility.version>
         <wiremock-standalone.version>3.9.1</wiremock-standalone.version>
         <log4j-slf4j-impl.version>3.0.0-beta2</log4j-slf4j-impl.version>
+        <wiremock-jre8.version>2.35.0</wiremock-jre8.version>
     </properties>
 
     <dependencies>
-        <!--SPRING BOOT-->
+        <!--  SPRING BOOT -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -43,23 +44,23 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-        <!--LOMBOK-->
+        <!--UNIT TESTS-->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj-core.version}</version>
+            <scope>test</scope>
         </dependency>
-        <!--TEST CONTAINERS-->
+        <!--  TEST CONTAINERS -->
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
+            <artifactId>testcontainers</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
+            <artifactId>junit-jupiter</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
@@ -69,47 +70,31 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--UNIT TESTING-->
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj-core.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-        </dependency>
-        <!--WIRE MOCK-->
+        <!--  WIREMOCK -->
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8-standalone</artifactId>
-            <version>${wiremock-jre8-standalone.version}</version>
+            <version>${wiremock-jre8.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--LOMBOK-->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j-slf4j-impl.version}</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.wiremock</groupId>
-            <artifactId>wiremock-standalone</artifactId>
-            <version>${wiremock-standalone.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-nop</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!--  AWAITILITY -->
         <dependency>
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

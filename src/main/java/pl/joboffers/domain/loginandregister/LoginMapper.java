@@ -7,7 +7,11 @@ import pl.joboffers.domain.loginandregister.dto.UserDto;
 class LoginMapper {
 
     UserDto mapToUserDto(User user) {
-        return new UserDto(user.id(), user.username(), user.password());
+        return UserDto.builder()
+                .id(user.id())
+                .username(user.username())
+                .password(user.password())
+                .build();
     }
 
     User mapFromRegisterUserDtoToUser(RegisterUserDto registerUserDto) {
@@ -18,6 +22,10 @@ class LoginMapper {
     }
 
     RegisterResultDto mapFromUserToRegisterResultDto(User savedUser) {
-        return new RegisterResultDto(savedUser.id(), true, savedUser.username());
+        return RegisterResultDto.builder()
+                .id(savedUser.id())
+                .created(true)
+                .username(savedUser.username())
+                .build();
     }
 }

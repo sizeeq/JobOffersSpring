@@ -1,4 +1,10 @@
 package pl.joboffers.domain.loginandregister.dto;
 
-public record RegisterUserDto(String username, String password) {
+import lombok.Builder;
+
+@Builder
+public record RegisterUserDto(
+        String username,
+        String password
+) {
 }
