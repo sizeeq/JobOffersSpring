@@ -6,6 +6,6 @@ import lombok.Getter;
 public class OfferNotFoundException extends RuntimeException{
 
     public OfferNotFoundException(String id) {
-        super(String.format("Offer with id = %s was not found", id));
+        super(String.format("Offer with id: %s was not found", id));
     }
 }
