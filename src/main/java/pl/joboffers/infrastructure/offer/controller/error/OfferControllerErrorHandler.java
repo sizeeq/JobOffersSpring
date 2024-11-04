@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import pl.joboffers.domain.offer.exception.DuplicateOfferException;
 import pl.joboffers.domain.offer.exception.OfferNotFoundException;
 import pl.joboffers.infrastructure.offer.controller.OfferErrorResponse;
 
@@ -20,5 +21,14 @@ public class OfferControllerErrorHandler {
         String message = exception.getMessage();
         log.error(message);
         return new OfferErrorResponse(message, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DuplicateOfferException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public OfferErrorResponse handleDuplicateOffer(DuplicateOfferException exception) {
+        String message = exception.getMessage();
+        log.error(message);
+        return new OfferErrorResponse(message, HttpStatus.CONFLICT);
     }
 }

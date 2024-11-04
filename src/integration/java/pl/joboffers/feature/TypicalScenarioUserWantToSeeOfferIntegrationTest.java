@@ -18,7 +18,9 @@ import pl.joboffers.infrastructure.offer.scheduler.OfferHttpClientScheduler;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,8 +47,8 @@ public class TypicalScenarioUserWantToSeeOfferIntegrationTest extends BaseIntegr
 
 
         //step 2: scheduler ran 1st time and made GET to external server and system added 0 offers to database
-        //given //when
-
+        //given
+        //when
         List<OfferResponseDto> offerResponseDtos = scheduler.fetchAllOffersAndSaveIfNotExist();
 
         //then
@@ -96,5 +98,45 @@ public class TypicalScenarioUserWantToSeeOfferIntegrationTest extends BaseIntegr
         //step 13: there are 2 new offers in external HTTP server
         //step 14: scheduler ran 3rd time and made GET to external server and system added 2 new offers with ids: 3000 and 4000 to database
         //step 15: user made GET /offers with header "Authorization: Bearer AAAA.BBBB.CCC" and system returned OK(200) with 4 offers with ids: 1000,2000,3000 and 4000
+
+
+        //step 16: user made POST /offers with header "Authorization: Bearer AAAA.BBBB.CCC" and offer as body and system returned CREATED(201) with saved offer
+        //given
+        //when
+        ResultActions performPostOffer = mockMvc.perform(post("/offers")
+                .content(
+                        """
+                                {
+                                "companyName": "JavAPPa",
+                                "position": "Java Developer",
+                                "salary": 6000,
+                                "offerUrl": "https://nofluffjobs.com/pl/job/mid-java-developer-stackmine-poznan-1"
+                                }
+                                """
+                )
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+
+        //then
+        MvcResult postResult = performPostOffer.andExpect(status().isCreated()).andReturn();
+        String json = postResult.getResponse().getContentAsString();
+        OfferResponseDto offerResponseDto = objectMapper.readValue(json, OfferResponseDto.class);
+
+        assertAll(
+                () -> assertThat(offerResponseDto.companyName()).isEqualTo("JavAPPa")
+        );
+
+
+        //step 17: user made GET /offers with header "Authorization: Bearer AAAA.BBBB.CCC" and system returned OK(200) with 1 offer
+        //given
+        //when
+        ResultActions performGetOffers = mockMvc.perform(get("/offers"));
+
+        //then
+        MvcResult mvcGetResult = performGetOffers.andExpect(status().isOk()).andReturn();
+        String jsonGetOffers = mvcGetResult.getResponse().getContentAsString();
+        List<OfferResponseDto> offersResponseDto = objectMapper.readValue(jsonGetOffers, new TypeReference<List<OfferResponseDto>>() {
+        });
+        assertThat(offersResponseDto).hasSize(1);
     }
 }
