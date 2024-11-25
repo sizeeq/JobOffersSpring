@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import pl.joboffers.domain.offer.exception.DuplicateOfferException;
+import pl.joboffers.domain.offer.exception.OfferDuplicateException;
 
 import java.util.List;
 import java.util.Map;
@@ -97,7 +97,7 @@ public class InMemoryOfferRepositoryImpl implements OfferRepository {
     @Override
     public <S extends Offer> S save(@NotNull S entity) {
         if (existsByUrl(entity.url())) {
-            throw new DuplicateOfferException(entity.url());
+            throw new OfferDuplicateException(entity.url());
         }
         String id = UUID.randomUUID().toString();
         Offer offer = new Offer(

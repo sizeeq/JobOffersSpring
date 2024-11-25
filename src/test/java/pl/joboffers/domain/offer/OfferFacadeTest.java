@@ -4,7 +4,7 @@ import org.junit.Test;
 import pl.joboffers.domain.offer.dto.JobOfferResponseDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
-import pl.joboffers.domain.offer.exception.DuplicateOfferException;
+import pl.joboffers.domain.offer.exception.OfferDuplicateException;
 import pl.joboffers.domain.offer.exception.OfferNotFoundException;
 
 import java.util.List;
@@ -120,7 +120,7 @@ public class OfferFacadeTest {
 
         //then
         assertThat(throwable)
-                .isInstanceOf(DuplicateOfferException.class)
+                .isInstanceOf(OfferDuplicateException.class)
                 .hasMessage("Offer with url url.url already exists");
     }
 }
