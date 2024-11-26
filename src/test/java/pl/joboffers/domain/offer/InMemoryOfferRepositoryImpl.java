@@ -1,12 +1,12 @@
 package pl.joboffers.domain.offer;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import pl.joboffers.domain.offer.exception.DuplicateOfferException;
 
 import java.util.List;
 import java.util.Map;
@@ -97,7 +97,7 @@ public class InMemoryOfferRepositoryImpl implements OfferRepository {
     @Override
     public <S extends Offer> S save(@NotNull S entity) {
         if (existsByUrl(entity.url())) {
-            throw new DuplicateOfferException(entity.url());
+            throw new DuplicateKeyException(String.format("Offer with offerUrl [%s] already exists", entity.url()));
         }
         String id = UUID.randomUUID().toString();
         Offer offer = new Offer(

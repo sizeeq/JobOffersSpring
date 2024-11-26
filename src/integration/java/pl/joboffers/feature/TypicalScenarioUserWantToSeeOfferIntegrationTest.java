@@ -114,16 +114,21 @@ public class TypicalScenarioUserWantToSeeOfferIntegrationTest extends BaseIntegr
                                 }
                                 """
                 )
-                .contentType(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON + ";charset=UTF-8")
         );
 
         //then
         MvcResult postResult = performPostOffer.andExpect(status().isCreated()).andReturn();
         String json = postResult.getResponse().getContentAsString();
         OfferResponseDto offerResponseDto = objectMapper.readValue(json, OfferResponseDto.class);
+        String id = offerResponseDto.id();
 
         assertAll(
-                () -> assertThat(offerResponseDto.companyName()).isEqualTo("JavAPPa")
+                () -> assertThat(offerResponseDto.companyName()).isEqualTo("JavAPPa"),
+                () -> assertThat(offerResponseDto.position()).isEqualTo("Java Developer"),
+                () -> assertThat(offerResponseDto.salary()).isEqualTo("6000"),
+                () -> assertThat(offerResponseDto.offerUrl()).isEqualTo("https://nofluffjobs.com/pl/job/mid-java-developer-stackmine-poznan-1"),
+                () -> assertThat(id).isNotNull()
         );
 
 

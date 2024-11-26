@@ -1,10 +1,10 @@
 package pl.joboffers.domain.offer;
 
 import org.junit.Test;
+import org.springframework.dao.DuplicateKeyException;
 import pl.joboffers.domain.offer.dto.JobOfferResponseDto;
 import pl.joboffers.domain.offer.dto.OfferRequestDto;
 import pl.joboffers.domain.offer.dto.OfferResponseDto;
-import pl.joboffers.domain.offer.exception.DuplicateOfferException;
 import pl.joboffers.domain.offer.exception.OfferNotFoundException;
 
 import java.util.List;
@@ -120,7 +120,7 @@ public class OfferFacadeTest {
 
         //then
         assertThat(throwable)
-                .isInstanceOf(DuplicateOfferException.class)
+                .isInstanceOf(DuplicateKeyException.class)
                 .hasMessage("Offer with url url.url already exists");
     }
 }

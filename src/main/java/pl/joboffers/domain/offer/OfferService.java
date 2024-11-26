@@ -1,8 +1,6 @@
 package pl.joboffers.domain.offer;
 
 import lombok.AllArgsConstructor;
-import pl.joboffers.domain.offer.exception.DuplicateOfferException;
-import pl.joboffers.domain.offer.exception.OfferSavingException;
 
 import java.util.List;
 
@@ -15,11 +13,7 @@ public class OfferService {
     List<Offer> fetchAndSaveAllOffersIfNotExist() {
         List<Offer> offers = fetchOffers();
         final List<Offer> filteredOffers = filterNotExistingOffers(offers);
-        try {
-            return offerRepository.saveAll(filteredOffers);
-        } catch (DuplicateOfferException duplicateOfferException) {
-            throw new OfferSavingException(duplicateOfferException.getMessage(), filteredOffers);
-        }
+        return offerRepository.saveAll(filteredOffers);
     }
 
     private List<Offer> fetchOffers() {
