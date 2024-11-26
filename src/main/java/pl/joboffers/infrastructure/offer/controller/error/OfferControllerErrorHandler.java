@@ -1,13 +1,12 @@
 package pl.joboffers.infrastructure.offer.controller.error;
 
-import com.mongodb.DuplicateKeyException;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import pl.joboffers.domain.offer.exception.OfferDuplicateException;
 import pl.joboffers.domain.offer.exception.OfferNotFoundException;
 
 import java.util.Collections;
@@ -28,8 +27,8 @@ public class OfferControllerErrorHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.CONFLICT)
-    public OfferPostErrorResponse handleDuplicateOffer(OfferDuplicateException exception) {
-        String message = exception.getMessage();
+    public OfferPostErrorResponse handleDuplicateOffer(DuplicateKeyException exception) {
+        String message = "Offer already exists";
         log.warn(message);
         return new OfferPostErrorResponse(Collections.singletonList(message), HttpStatus.CONFLICT);
     }

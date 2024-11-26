@@ -2,6 +2,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://admin:admin@localhost:27017/joboffers-web
+      auto-index-creation: true
   main:
     allow-bean-definition-overriding: true
   mvc:
